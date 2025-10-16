@@ -27,7 +27,7 @@ torchvision==0.16.2
 
 # Stable Diffusion 
 diffusers>=0.20.0
-
+transformers
 
 # Core Dependencies
 scipy==1.12.0
