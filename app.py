@@ -148,7 +148,7 @@ def create_avatar(img: Image.Image) -> Image.Image:
     # Stylize with SD prompt
     prompt = "highly detailed, digital portrait, professional lighting, cinematic style, artistic AI avatar"
     with torch.autocast("cuda"):
-        result = sd_pipe(prompt=prompt, image=img_resized, strength=0.75, guidance_scale=7.5)
+        result = sd_pipe(prompt=prompt, image=img_resized, strength=0.5, guidance_scale=5.0)
 
     avatar = result.images[0]
     
