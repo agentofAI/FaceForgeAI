@@ -20,10 +20,10 @@ realesrgan==0.3.0
 basicsr==1.4.2
 
 # PyTorch (GPU) - Critical for CUDA
-torch
-torchvision==0.13.1
+torch==2.1.2
+torchvision==0.16.2
 #--extra-index-url https://download.pytorch.org/whl/cu118
-#--extra-index-url https://download.pytorch.org/whl/cu121
+--extra-index-url https://download.pytorch.org/whl/cu121
 
 
 
