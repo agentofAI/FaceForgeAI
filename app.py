@@ -12,6 +12,12 @@ from PIL import Image, ImageEnhance, ImageOps
 from rembg import remove
 import io
 
+
+import torchvision
+print("Printing Torch and TorchVision versions:")
+print(torch.__version__)
+print(torchvision.__version__)
+
 # GPU libraries
 from gfpgan import GFPGANer
 from basicsr.archs.rrdbnet_arch import RRDBNet
