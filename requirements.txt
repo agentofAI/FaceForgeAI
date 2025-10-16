@@ -22,8 +22,8 @@ basicsr==1.4.2
 # PyTorch (GPU) - Critical for CUDA
 torch
 torchvision
---extra-index-url https://download.pytorch.org/whl/cu118
---extra-index-url https://download.pytorch.org/whl/cu121
+#--extra-index-url https://download.pytorch.org/whl/cu118
+#--extra-index-url https://download.pytorch.org/whl/cu121
 
 
 
