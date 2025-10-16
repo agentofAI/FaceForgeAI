@@ -54,20 +54,10 @@ def load_models():
         device=device
     )
     
-    # Stable Diffusion Img2Img pipeline (public model)
-    sd_pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
-        "runwayml/stable-diffusion-v1-5",
-        torch_dtype=torch.float16
-    ).to(device)
-
-    # Optimize for ZeroGPU memory
-    sd_pipe.enable_attention_slicing()
-    sd_pipe.enable_model_cpu_offload()
-
-    return face_enhancer, sd_pipe
+    return face_enhancer
 
 # Load models globally
-face_enhancer, sd_pipe = load_models()
+face_enhancer = load_models()
 
 # ------------------------------------------
 # GPU-Accelerated Functions
@@ -141,15 +131,10 @@ def create_avatar(img: Image.Image) -> Image.Image:
     # Enhance face
     img_enhanced = enhance_face(img)
     
-    # Resize for SD (512x512)
-    img_resized = img_enhanced.convert("RGB").resize((512, 512))
-
-    # Stylize with SD prompt
-    prompt = "highly detailed, digital portrait, professional lighting, cinematic style, artistic AI avatar"
-    with torch.autocast("cuda"):
-        result = sd_pipe(prompt=prompt, image=img_resized, strength=0.75, guidance_scale=7.5)
-
-    avatar = result.images[0]
+    # Stylize
+    avatar = ImageOps.posterize(img_enhanced, bits=4)
+    avatar = ImageEnhance.Color(avatar).enhance(1.8)
+    avatar = ImageEnhance.Contrast(avatar).enhance(1.2)
     
     return avatar
 
