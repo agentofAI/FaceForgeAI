@@ -23,7 +23,7 @@ basicsr==1.4.2
 torch==2.1.2
 torchvision==0.16.2
 #--extra-index-url https://download.pytorch.org/whl/cu118
---extra-index-url https://download.pytorch.org/whl/cu121
+#--extra-index-url https://download.pytorch.org/whl/cu121
 
 # Stable Diffusion 
 diffusers>=0.20.0
