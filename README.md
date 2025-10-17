@@ -118,4 +118,3 @@ Each model used retains its original open-source license.
 ## 👨‍💻 Author
 
 Vijay S. Chaudhari
-🔗 LinkedIn Profile
