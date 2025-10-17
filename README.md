@@ -78,13 +78,13 @@ Open the local Gradio URL (typically http://127.0.0.1:7860) in your browser.
 ---
 
 ## 🎨 Avatar Prompt Presets
-Style Label	            Prompt
-🎬 Cinematic Portrait	highly detailed, digital portrait, professional lighting, cinematic style, artistic AI avatar
-🎨 Stylized Realism	    stylized yet realistic portrait, balanced lighting, subtle gradient background, sharp 
-                        focus on face
-🏢 Studio Professional	studio portrait, even lighting, neutral background, realistic skin, confident pose
-🤵 Natural Headshot	    realistic professional headshot, soft studio lighting, neutral background, crisp details, 
-                        natural skin tone
+
+| Style Label | Prompt |
+|--------------|--------|
+| 🎬 **Cinematic Portrait** | highly detailed, digital portrait, professional lighting, cinematic style, artistic AI avatar |
+| 🎨 **Stylized Realism** | stylized yet realistic portrait, balanced lighting, subtle gradient background, sharp focus on face |
+| 🏢 **Studio Professional** | studio portrait, even lighting, neutral background, realistic skin, confident pose |
+| 🤵 **Natural Headshot** | realistic professional headshot, soft studio lighting, neutral background, crisp details, natural skin tone |
 
 ---
 
@@ -106,6 +106,7 @@ faceforge-ai/
 ├── requirements.txt      # Dependencies
 ├── assets/               # Optional screenshots and samples
 └── README.md             # Documentation
+
 
 ---
 
