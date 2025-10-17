@@ -137,7 +137,7 @@ def create_passport(img: Image.Image) -> Image.Image:
     return bg
 
 @spaces.GPU
-def create_avatar(img: Image.Image) -> Image.Image:
+def create_avatar(img: Image.Image, prompt: str, strength: float, guidance_scale: float) -> Image.Image:
     """Stylized AI avatar using Stable Diffusion Img2Img with user inputs"""
     # Enhance face
     img_enhanced = enhance_face(img)
@@ -223,29 +223,37 @@ with gr.Blocks(theme=gr.themes.Soft(), title="FaceForge AI") as demo:
                 step=0.5
             )
 
-            process_btn = gr.Button("✨ Generate All Images", variant="primary", size="lg")
-
         with gr.Column(scale=1):
             gr.Markdown("### Results")
+
+            # --- Independent Outputs & Buttons ---
             output_headshot = gr.Image(label="💼 Professional Headshot", type="pil")
+            btn_headshot = gr.Button("📸 Generate Headshot", variant="secondary")
+
             output_passport = gr.Image(label="🛂 Passport Photo", type="pil")
+            btn_passport = gr.Button("🪪 Generate Passport", variant="secondary")
+
             output_avatar = gr.Image(label="🎭 AI Avatar", type="pil")
+            btn_avatar = gr.Button("✨ Generate Avatar", variant="primary")
 
-    # --- Updated process function mapping with label → full prompt translation ---
-    def process_all_with_params(img, preset_label, custom, strength, guidance):
-        # Map the selected label to its full prompt text
-        preset_prompt = PROMPT_MAP[preset_label]
-        # Use custom prompt if provided, otherwise fallback to preset
-        final_prompt = custom.strip() if custom and custom.strip() != "" else preset_prompt
-        headshot = create_headshot(img)
-        passport = create_passport(img)
-        avatar = create_avatar(img, final_prompt, strength, guidance)
-        return headshot, passport, avatar
+    # --- Functions for individual generations ---
+    def run_headshot(img):
+        return create_headshot(img)
 
-    process_btn.click(
-        fn=process_all_with_params,
+    def run_passport(img):
+        return create_passport(img)
+
+    def run_avatar(img, preset_label, custom, strength, guidance):
+        final_prompt = custom.strip() if custom and custom.strip() != "" else PROMPT_MAP[preset_label]
+        return create_avatar(img, final_prompt, strength, guidance)
+
+    # --- Button actions ---
+    btn_headshot.click(fn=run_headshot, inputs=[input_image], outputs=[output_headshot])
+    btn_passport.click(fn=run_passport, inputs=[input_image], outputs=[output_passport])
+    btn_avatar.click(
+        fn=run_avatar,
         inputs=[input_image, preset_prompt, custom_prompt, strength_slider, guidance_slider],
-        outputs=[output_headshot, output_passport, output_avatar]
+        outputs=[output_avatar]
     )
     
     gr.Markdown(
