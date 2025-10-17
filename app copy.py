@@ -138,21 +138,23 @@ def create_passport(img: Image.Image) -> Image.Image:
 
 @spaces.GPU
 def create_avatar(img: Image.Image) -> Image.Image:
-    """Stylized AI avatar using Stable Diffusion Img2Img with user inputs"""
+    """Stylized AI avatar"""
     # Enhance face
     img_enhanced = enhance_face(img)
     
     # Resize for SD (512x512)
     img_resized = img_enhanced.convert("RGB").resize((512, 512))
 
-    # Stylize with SD prompt. We are selecting these from UI now.
+    # Stylize with SD prompt
     #prompt = "highly detailed, digital portrait, professional lighting, cinematic style, artistic AI avatar"
     #prompt = "stylized yet realistic portrait, balanced lighting, subtle gradient background, sharp focus on face"
     #prompt = "studio portrait, even lighting, neutral background, realistic skin, confident pose"
-    #prompt = "realistic professional headshot, soft studio lighting, neutral background, crisp details, natural skin tone"    
+    prompt = "realistic professional headshot, soft studio lighting, neutral background, crisp details, natural skin tone"
+    
+
 
     with torch.autocast("cuda"):
-        result = sd_pipe(prompt=prompt, image=img_resized, strength=strength, guidance_scale=guidance_scale)
+        result = sd_pipe(prompt=prompt, image=img_resized, strength=0.4, guidance_scale=5.0)
 
     avatar = result.images[0]
     
@@ -174,78 +176,35 @@ with gr.Blocks(theme=gr.themes.Soft(), title="FaceForge AI") as demo:
     gr.Markdown(
         """
         # 🎨 FaceForge AI
-        ### GPU-Accelerated Professional Headshot & Avatar Generator  
-        Upload your photo and choose or customize how your AI avatar is generated.
+        ### GPU-Accelerated Professional Headshot & Avatar Generator
+        Upload your photo and generate professional headshots, passport photos, and AI avatars instantly!
         """
     )
-
-    # --- Define a mapping: Short Label -> Full Prompt Text ---
-    PROMPT_MAP = {
-        "🎬 Cinematic Portrait": "highly detailed, digital portrait, professional lighting, cinematic style, artistic AI avatar",
-        "🎨 Stylized Realism": "stylized yet realistic portrait, balanced lighting, subtle gradient background, sharp focus on face",
-        "🏢 Studio Professional": "studio portrait, even lighting, neutral background, realistic skin, confident pose",
-        "🤵 Natural Headshot": "realistic professional headshot, soft studio lighting, neutral background, crisp details, natural skin tone"
-    }
-
+    
     with gr.Row():
-        with gr.Column(scale=1):
+        with gr.Column():
             input_image = gr.Image(type="pil", label="📷 Upload Your Photo")
-
-            gr.Markdown("### ⚙️ Avatar Generation Settings")
-
-            # Dropdown shows short labels only
-            preset_prompt = gr.Dropdown(
-                label="🎨 Choose Avatar Style Preset",
-                choices=list(PROMPT_MAP.keys()),
-                value="🤵 Natural Headshot"
-            )
-
-            # Optional custom prompt box for flexibility
-            custom_prompt = gr.Textbox(
-                label="✏️ Custom Prompt (optional)",
-                placeholder="Enter your own prompt or leave blank to use preset...",
-                lines=2
-            )
-
-            strength_slider = gr.Slider(
-                label="🎛️ Style Strength (0.0 = keep original, 1.0 = full restyle)",
-                minimum=0.1,
-                maximum=1.0,
-                value=0.45,
-                step=0.05
-            )
-
-            guidance_slider = gr.Slider(
-                label="🎯 Prompt Guidance Scale (higher = more prompt influence)",
-                minimum=1.0,
-                maximum=10.0,
-                value=5.5,
-                step=0.5
-            )
-
             process_btn = gr.Button("✨ Generate All Images", variant="primary", size="lg")
-
-        with gr.Column(scale=1):
+        
+        with gr.Column():
             gr.Markdown("### Results")
-            output_headshot = gr.Image(label="💼 Professional Headshot", type="pil")
-            output_passport = gr.Image(label="🛂 Passport Photo", type="pil")
-            output_avatar = gr.Image(label="🎭 AI Avatar", type="pil")
-
-    # --- Updated process function mapping with label → full prompt translation ---
-    def process_all_with_params(img, preset_label, custom, strength, guidance):
-        # Map the selected label to its full prompt text
-        preset_prompt = PROMPT_MAP[preset_label]
-        # Use custom prompt if provided, otherwise fallback to preset
-        final_prompt = custom.strip() if custom and custom.strip() != "" else preset_prompt
-        headshot = create_headshot(img)
-        passport = create_passport(img)
-        avatar = create_avatar(img, final_prompt, strength, guidance)
-        return headshot, passport, avatar
-
+    
+    with gr.Row():
+        output_headshot = gr.Image(label="💼 Professional Headshot", type="pil")
+        output_passport = gr.Image(label="🛂 Passport Photo", type="pil")
+        output_avatar = gr.Image(label="🎭 AI Avatar", type="pil")
+    
+    # Process button
     process_btn.click(
-        fn=process_all_with_params,
-        inputs=[input_image, preset_prompt, custom_prompt, strength_slider, guidance_slider],
+        fn=process_all,
+        inputs=input_image,
         outputs=[output_headshot, output_passport, output_avatar]
+    )
+    
+    # Examples
+    gr.Examples(
+        examples=[],  # Add example image paths if available
+        inputs=input_image
     )
     
     gr.Markdown(
