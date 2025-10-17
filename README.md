@@ -100,13 +100,14 @@ Open the local Gradio URL (typically http://127.0.0.1:7860) in your browser.
 ---
 
 ## 🧠 Project Structure
+```
 faceforge-ai/
 │
 ├── app.py                # Main application
 ├── requirements.txt      # Dependencies
 ├── assets/               # Optional screenshots and samples
 └── README.md             # Documentation
-
+```
 
 ---
 
