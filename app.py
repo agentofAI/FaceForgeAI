@@ -154,7 +154,7 @@ def create_avatar(img: Image.Image, prompt: str, strength: float, guidance_scale
     with torch.autocast("cuda"):
         result = sd_pipe(prompt=prompt, image=img_resized, strength=strength, guidance_scale=guidance_scale)
 
-    avatar = result.images[0]
+    avatar = enhance_face(result.images[0])
     
     return avatar
 
