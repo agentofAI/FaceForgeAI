@@ -53,15 +53,6 @@ This edition is optimized for **ZeroGPU Spaces** — efficient, on-demand GPU ex
 | **Rembg 2.x** | Background removal |
 | **Pillow / OpenCV / Torch** | Image processing + GPU acceleration |
 
----
-
-## 🖥️ UI Preview  
-
-| Upload → Choose → Generate |  
-|-----------------------------|  
-| ![FaceForge AI UI Preview](assets/faceforge_ui_demo.png) |  
-
-> _Example UI layout with independent buttons for Background Remover, Passport, and Avatar generation._
 
 ---
 
@@ -71,19 +62,22 @@ This edition is optimized for **ZeroGPU Spaces** — efficient, on-demand GPU ex
 ```bash
 git clone https://github.com/agentofAI/FaceForgeAI.git
 cd FaceForgeAI_ZeroGPU
+```
 
 ### 2️⃣ Install Dependencies
-
+```bash
 pip install -r requirements.txt
+```
 
 ### 3️⃣ Run Locally
+```bash
 python app.py
-
+```
 Open the local Gradio URL (typically http://127.0.0.1:7860) in your browser.
 
 ---
 
-Avatar Prompt Presets
+## 🎨 Avatar Prompt Presets
 Style Label	            Prompt
 🎬 Cinematic Portrait	highly detailed, digital portrait, professional lighting, cinematic style, artistic AI avatar
 🎨 Stylized Realism	    stylized yet realistic portrait, balanced lighting, subtle gradient background, sharp 
