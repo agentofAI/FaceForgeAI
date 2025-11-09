@@ -12,9 +12,18 @@ from PIL import Image, ImageEnhance, ImageOps
 from rembg import remove
 from diffusers import StableDiffusionImg2ImgPipeline
 from diffusers import StableDiffusionXLPipeline
-from instantid import InstantID
 import io
+import os, sys, subprocess
 
+# --- Ensure InstantID is available ---
+if not os.path.exists("instantid"):
+    print("🔄 Cloning InstantID repository...")
+    subprocess.run(["git", "clone", "https://github.com/InstantID/InstantID.git"], check=True)
+    sys.path.append(os.path.abspath("instantid"))
+else:
+    sys.path.append(os.path.abspath("instantid"))
+
+from instantid import InstantID
 
 import torchvision
 print("Printing Torch and TorchVision versions:")
