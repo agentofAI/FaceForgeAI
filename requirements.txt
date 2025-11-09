@@ -31,7 +31,7 @@ transformers==4.39.0
 accelerate==0.28.0
 
 # InstantID
-git+https://github.com/InstantID/InstantID.git
+
 
 # Core Dependencies
 scipy==1.12.0
