@@ -33,7 +33,7 @@ sys.path.append(os.path.join(instantid_path, "pipelines"))
 
 #sys.path.append(os.path.abspath("instantid"))
 #sys.path.insert(0, os.path.join(os.getcwd(), 'InstantID'))
-try
+try:
     from pipelines.pipeline_instantid import InstantIDPipeline
     print("✅ InstantIDPipeline imported successfully.")
 except Exception as e:
