@@ -25,7 +25,8 @@ if not os.path.exists("instantid"):
     if os.path.exists("InstantID") and not os.path.exists("instantid"):
         os.rename("InstantID", "instantid")    
 
-sys.path.append(os.path.abspath("instantid"))
+#sys.path.append(os.path.abspath("instantid"))
+sys.path.insert(0, os.path.join(os.getcwd(), 'InstantID'))
 
 from pipelines.pipeline_instantid import InstantIDPipeline
 
