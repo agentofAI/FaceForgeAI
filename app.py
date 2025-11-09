@@ -8,6 +8,8 @@ import spaces
 import torch
 import cv2
 import numpy as np
+from pathlib import Path
+
 from PIL import Image, ImageEnhance, ImageOps
 from rembg import remove
 from diffusers import StableDiffusionImg2ImgPipeline
