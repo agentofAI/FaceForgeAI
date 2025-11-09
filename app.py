@@ -15,7 +15,7 @@ from rembg import remove
 from diffusers import StableDiffusionImg2ImgPipeline
 from diffusers import StableDiffusionXLPipeline
 import io
-import os, sys, subprocess, warnings, logging
+import os, sys, subprocess, warnings, logging, importlib.util
 
 warnings.filterwarnings("ignore", category=UserWarning)
 logging.getLogger("onnxruntime").setLevel(logging.ERROR)
