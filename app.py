@@ -3,6 +3,7 @@
 # Author: Vijay S. Chaudhari | 2025
 # ==========================================
 
+import importlib.util
 import gradio as gr
 import spaces
 import torch
@@ -15,7 +16,7 @@ from rembg import remove
 from diffusers import StableDiffusionImg2ImgPipeline
 from diffusers import StableDiffusionXLPipeline
 import io
-import os, sys, subprocess, warnings, logging, importlib.util
+import os, sys, subprocess, warnings, logging, 
 
 warnings.filterwarnings("ignore", category=UserWarning)
 logging.getLogger("onnxruntime").setLevel(logging.ERROR)
