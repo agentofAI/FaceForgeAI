@@ -20,10 +20,59 @@ logging.getLogger("onnxruntime").setLevel(logging.ERROR)
 os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
 # --- Ensure InstantID is available ---
-if not os.path.exists("instantid"):
+if not Path("instantid").exists():
     print("🔄 Cloning InstantID repository...")
-    subprocess.run(["git", "clone", "https://github.com/InstantID/InstantID.git"], check=True)
+    subprocess.run(["git", "clone", "--depth", "1", "https://github.com/InstantID/InstantID.git", "instantid"],check=True)
 
+repo_root = Path("instantid").resolve()
+
+# 🧭 Search for a pipeline file that matches *instantid*.py under the repo
+candidates = list(repo_root.rglob("pipeline*instantid*.py"))
+if not candidates:
+    # Fallback common names across commits
+    fallback_names = [
+        "pipelines/pipeline_instantid.py",
+        "pipelines/pipeline_stable_diffusion_instantid.py",
+        "pipelines/pipeline_stable_diffusion_xl_instantid.py",
+    ]
+    for name in fallback_names:
+        p = repo_root / name
+        if p.exists():
+            candidates = [p]
+            break
+
+if not candidates:
+    raise FileNotFoundError(
+        "Could not locate an InstantID pipeline file under ./instantid. "
+        "Repo layout may have changed. Please check the repo structure."
+    )
+
+pipeline_file = candidates[0]
+print(f"✅ Using InstantID pipeline file: {pipeline_file.relative_to(repo_root)}")
+
+# 🪄 Import the pipeline module by file path (no package needed)
+spec = importlib.util.spec_from_file_location("instantid_pipeline", str(pipeline_file))
+instantid_mod = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(instantid_mod)  # type: ignore
+
+# 🔎 Pick a pipeline class that looks like an InstantID Pipeline
+InstantIDPipeline = None
+for attr in dir(instantid_mod):
+    if "InstantID" in attr and "Pipeline" in attr:
+        InstantIDPipeline = getattr(instantid_mod, attr)
+        break
+
+if InstantIDPipeline is None:
+    # Helpful diagnostics
+    print("Available names in module:", [a for a in dir(instantid_mod) if "Pipeline" in a])
+    raise ImportError(
+        "Could not find an InstantID pipeline class. "
+        "Looked for a class name containing both 'InstantID' and 'Pipeline'."
+    )
+
+print(f"✅ Imported pipeline class: {InstantIDPipeline.__name__}")
+
+'''
 if os.path.exists("InstantID") and not os.path.exists("instantid"):
     os.rename("InstantID", "instantid")    
 
@@ -39,6 +88,7 @@ try:
 except Exception as e:
     print("⚠️ Failed to import InstantIDPipeline:", e)
     InstantIDPipeline = None  # graceful fallback
+'''
 
 import torchvision
 print("Printing Torch and TorchVision versions:")
