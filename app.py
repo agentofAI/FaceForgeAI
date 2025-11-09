@@ -13,22 +13,32 @@ from rembg import remove
 from diffusers import StableDiffusionImg2ImgPipeline
 from diffusers import StableDiffusionXLPipeline
 import io
-import os, sys, subprocess, warnings
+import os, sys, subprocess, warnings, logging
 
 warnings.filterwarnings("ignore", category=UserWarning)
+logging.getLogger("onnxruntime").setLevel(logging.ERROR)
 os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
 # --- Ensure InstantID is available ---
 if not os.path.exists("instantid"):
     print("🔄 Cloning InstantID repository...")
     subprocess.run(["git", "clone", "https://github.com/InstantID/InstantID.git"], check=True)
-    if os.path.exists("InstantID") and not os.path.exists("instantid"):
-        os.rename("InstantID", "instantid")    
+
+if os.path.exists("InstantID") and not os.path.exists("instantid"):
+    os.rename("InstantID", "instantid")    
+
+instantid_path = os.path.abspath("instantid")
+sys.path.append(instantid_path)
+sys.path.append(os.path.join(instantid_path, "pipelines"))
 
 #sys.path.append(os.path.abspath("instantid"))
-sys.path.insert(0, os.path.join(os.getcwd(), 'InstantID'))
-
-from pipelines.pipeline_instantid import InstantIDPipeline
+#sys.path.insert(0, os.path.join(os.getcwd(), 'InstantID'))
+try
+    from pipelines.pipeline_instantid import InstantIDPipeline
+    print("✅ InstantIDPipeline imported successfully.")
+except Exception as e:
+    print("⚠️ Failed to import InstantIDPipeline:", e)
+    InstantIDPipeline = None  # graceful fallback
 
 import torchvision
 print("Printing Torch and TorchVision versions:")
