@@ -13,18 +13,21 @@ from rembg import remove
 from diffusers import StableDiffusionImg2ImgPipeline
 from diffusers import StableDiffusionXLPipeline
 import io
-import os, sys, subprocess
+import os, sys, subprocess, warnings
+
+warnings.filterwarnings("ignore", category=UserWarning)
+os.environ["CUDA_VISIBLE_DEVICES"] = ""
 
 # --- Ensure InstantID is available ---
 if not os.path.exists("instantid"):
     print("🔄 Cloning InstantID repository...")
     subprocess.run(["git", "clone", "https://github.com/InstantID/InstantID.git"], check=True)
-    os.rename("InstantID", "instantid")
-    sys.path.append(os.path.abspath("instantid"))
-else:
-    sys.path.append(os.path.abspath("instantid"))
+    if os.path.exists("InstantID") and not os.path.exists("instantid"):
+        os.rename("InstantID", "instantid")    
 
-from instantid import InstantID
+sys.path.append(os.path.abspath("instantid"))
+
+from pipelines.pipeline_instantid import InstantIDPipeline
 
 import torchvision
 print("Printing Torch and TorchVision versions:")
@@ -171,8 +174,9 @@ def create_avatar(img: Image.Image, prompt: str, strength: float, guidance_scale
         torch_dtype=torch.float16
     ).to(device)
 
-    instantid = InstantID.from_pretrained("InstantID/InstantID")
-    pipe.load_ip_adapter(instantid)
+    instantid = InstantIDPipeline.from_pretrained("InstantID/InstantID", torch_dtype=torch.float16,)
+    pipe.to("cuda" if torch.cuda.is_available() else "cpu")
+    #pipe.load_ip_adapter(instantid)
 
     # --- Step 2: Optimize for ZeroGPU memory ---
     pipe.enable_attention_slicing()
