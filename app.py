@@ -19,6 +19,7 @@ import os, sys, subprocess
 if not os.path.exists("instantid"):
     print("🔄 Cloning InstantID repository...")
     subprocess.run(["git", "clone", "https://github.com/InstantID/InstantID.git"], check=True)
+    os.rename("InstantID", "instantid")
     sys.path.append(os.path.abspath("instantid"))
 else:
     sys.path.append(os.path.abspath("instantid"))
