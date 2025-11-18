@@ -56,10 +56,15 @@ def load_models():
     )
     
     # Stable Diffusion Img2Img pipeline (public model)
-    sd_pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
-        "runwayml/stable-diffusion-v1-5",
-        torch_dtype=torch.float16
-    ).to(device)
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    if device == "cuda":
+        sd_pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
+            "runwayml/stable-diffusion-v1-5",
+            torch_dtype=torch.float16
+        ).to(device)
+    else:
+        sd_pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
+            "runwayml/stable-diffusion-v1-5").to(device)
 
     # Optimize for ZeroGPU memory
     sd_pipe.enable_attention_slicing()
