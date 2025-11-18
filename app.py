@@ -272,7 +272,7 @@ with gr.Blocks(theme=gr.themes.Soft(), title="FaceForge AI") as demo:
         ### Features
         - 💼 **Professional Headshots**: Perfect for LinkedIn and business profiles
         - 🛂 **Passport Photos**: Standard 600x600px with white background
-        - 🎭 **AI Avatars**: Stylized versions for social media
+        - 🎭 **AI Avatars**: Stylized versions for social media (Work In Progress - Identity Retention)
         - ⚡ **GPU-Accelerated**: Fast processing with GFPGAN enhancement
         
         © 2025 Vijay S. Chaudhari | Powered by ZeroGPU 🚀
