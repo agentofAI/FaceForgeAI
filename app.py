@@ -11,6 +11,7 @@ import numpy as np
 from PIL import Image, ImageEnhance, ImageOps
 from rembg import remove
 from diffusers import StableDiffusionImg2ImgPipeline
+from accelerate import Accelerator
 import io
 
 
@@ -23,6 +24,8 @@ print(torchvision.__version__)
 from gfpgan import GFPGANer
 from basicsr.archs.rrdbnet_arch import RRDBNet
 from realesrgan import RealESRGANer
+
+accelerator = Accelerator()
 
 # ------------------------------------------
 # Model Loading (Outside GPU decorator)
@@ -66,8 +69,11 @@ def load_models():
         sd_pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
             "runwayml/stable-diffusion-v1-5").to(device)
 
-    # Optimize for ZeroGPU memory
+    # Optimize for ZeroGPU memory    
     sd_pipe.enable_attention_slicing()
+
+    # Do we need this conditionalize ?
+    sd_pipe = accelerator.prepare(sd_pipe)
     sd_pipe.enable_model_cpu_offload()
 
     return face_enhancer, sd_pipe

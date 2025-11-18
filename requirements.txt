@@ -42,3 +42,5 @@ filterpy==1.4.5
 
 # Optional: For better performance
 # onnxruntime-gpu==1.17.0
+
+accelerate
