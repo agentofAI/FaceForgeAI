@@ -65,16 +65,15 @@ def load_models():
             "runwayml/stable-diffusion-v1-5",
             torch_dtype=torch.float16
         ).to(device)
+
+        # Optimize for ZeroGPU memory    
+        sd_pipe.enable_attention_slicing()
+        sd_pipe.enable_model_cpu_offload()
+
     else:
         sd_pipe = StableDiffusionImg2ImgPipeline.from_pretrained(
-            "runwayml/stable-diffusion-v1-5").to(device)
-
-    # Optimize for ZeroGPU memory    
-    sd_pipe.enable_attention_slicing()
-
-    # Do we need this conditionalize ?
-    sd_pipe = accelerator.prepare(sd_pipe)
-    sd_pipe.enable_model_cpu_offload()
+            "runwayml/stable-diffusion-v1-5").to(device)  
+        sd_pipe.to(device)
 
     return face_enhancer, sd_pipe
 
