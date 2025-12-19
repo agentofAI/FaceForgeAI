@@ -8,10 +8,10 @@ import hashlib
 
 
 class RateLimiter:
-    def __init__(self, session_file: str, daily_limit: int, dev_daily_limit: int):
+    def __init__(self, session_file: str, daily_limit: int, dev_limit: int):
         self.session_file = Path(session_file)
         self.daily_limit = daily_limit
-        self.dev_daily_limit = dev_daily_limit
+        self.dev_limit = dev_limit
         self.is_dev_mode = os.getenv("DEV_MODE", "false").lower() == "true"
         
         # Create session file if doesn't exist
@@ -31,11 +31,16 @@ class RateLimiter:
         with open(self.session_file, 'w') as f:
             json.dump(data, f, indent=2)
     
-    def _get_device_id(self, request: dict) -> str:
+    def _get_device_id(self, request) -> str:
         """Generate consistent device ID from request headers"""
-        # Use IP + User-Agent for fingerprinting
-        ip = request.get("client", {}).get("host", "unknown")
-        user_agent = request.get("headers", {}).get("user-agent", "unknown")
+        # Handle Gradio Request object
+        try:
+            ip = getattr(request, 'client', {}).get('host', 'unknown') if hasattr(request, 'client') else 'unknown'
+            headers = getattr(request, 'headers', {}) if hasattr(request, 'headers') else {}
+            user_agent = headers.get('user-agent', 'unknown') if isinstance(headers, dict) else 'unknown'
+        except:
+            ip = 'unknown'
+            user_agent = 'unknown'
         
         # Hash to create stable ID
         fingerprint = f"{ip}:{user_agent}"
@@ -59,7 +64,7 @@ class RateLimiter:
         
         return cleaned
     
-    def check_limit(self, request: dict) -> Tuple[bool, int, datetime]:
+    def check_limit(self, request) -> Tuple[bool, int, datetime]:
         """
         Check if device has exceeded rate limit
         
@@ -70,7 +75,7 @@ class RateLimiter:
         data = self._load_data()
         data = self._cleanup_expired(data)
         
-        limit = self.dev_daily_limit if self.is_dev_mode else self.daily_limit
+        limit = self.dev_limit if self.is_dev_mode else self.daily_limit
         now = datetime.now(timezone.utc)
         
         if device_id not in data:
@@ -97,7 +102,7 @@ class RateLimiter:
         
         return allowed, remaining, reset_time
     
-    def increment(self, request: dict):
+    def increment(self, request):
         """Increment usage count for device"""
         device_id = self._get_device_id(request)
         data = self._load_data()
@@ -109,7 +114,7 @@ class RateLimiter:
     def get_limit_message(self, remaining: int, reset_time: datetime) -> str:
         """Generate user-friendly limit message"""
         mode = "DEV" if self.is_dev_mode else "Standard"
-        limit = self.dev_daily_limit if self.is_dev_mode else self.daily_limit
+        limit = self.dev_limit if self.is_dev_mode else self.daily_limit
         
         if remaining > 0:
             return f"✅ {remaining}/{limit} generations remaining today ({mode} mode)"
