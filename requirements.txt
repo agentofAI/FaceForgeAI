@@ -6,3 +6,4 @@ PyYAML>=6.0
 torch>=2.0.0
 torchvision>=0.15.0
 requests>=2.31.0
+onnxruntime>=1.15.0
