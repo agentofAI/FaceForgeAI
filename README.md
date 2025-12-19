@@ -1,3 +1,16 @@
+---
+title: FaceForgeAI ZeroGPU
+emoji: 🐨
+colorFrom: pink
+colorTo: pink
+sdk: gradio
+sdk_version: 5.49.1
+app_file: app.py
+pinned: false
+license: mit
+short_description: FaceForgeAI_ZeroGPU
+---
+
 # 🎨 FaceForge AI
 [![Hugging Face Space](https://img.shields.io/badge/🤗%20Open%20in-Hugging%20Face%20Space-yellow)](https://huggingface.co/spaces/VcRlAgent/FaceForgeAI)
 
