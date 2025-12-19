@@ -1,0 +1,130 @@
+# FaceForge AI Configuration
+# Author: Vijay S. Chaudhari | 2025
+
+# Rate Limiting
+rate_limit:
+  default_daily_limit: 5
+  dev_daily_limit: 10
+  reset_timezone: "UTC"
+  session_file: "rate_limits.json"
+
+# Replicate Model
+replicate:
+  model: "zsxkib/instant-id-basic:beeceec1b60538a6b77c1549b8b1f91794b133c53443234feb8faa3c61ceab49"
+  
+  # Default settings (used when advanced options disabled)
+  default_settings:
+    cfg: 4.5
+    steps: 30
+    width: 1600
+    height: 1600
+    denoise: 1
+    scheduler: "karras"
+    sampler_name: "ddpm"
+    output_format: "webp"
+    output_quality: 90
+    instantid_weight: 1
+    instantid_start_at: 0
+    instantid_end_at: 1
+  
+  # Advanced settings ranges (for UI sliders when enabled)
+  advanced_ranges:
+    cfg:
+      min: 1.0
+      max: 10.0
+      step: 0.5
+    steps:
+      min: 20
+      max: 50
+      step: 5
+    denoise:
+      min: 0.5
+      max: 1.0
+      step: 0.1
+
+# Scene Change Prompts
+scenes:
+  "🏖️ Coastal Run":
+    prompt: |
+      Portrait of the same runner, black hoodie
+      running along a coastal path,
+      ocean and horizon in the background,
+      confident and relaxed expression,
+      warm sunrise lighting,
+      realistic lifestyle photography
+    negative: "NSFW, nudity, painting, drawing, illustration, glitch, deformed, mutated, cross-eyed, ugly, disfigured, wrinkles, open mouth, closed eyes, other characters"
+  
+  "🌃 Urban Evening":
+    prompt: |
+      Portrait of the same runner,
+      evening run in an urban environment,
+      city lights in the background,
+      confident relaxed smile,
+      soft ambient night lighting,
+      realistic low-light photography
+    negative: "NSFW, nudity, painting, drawing, illustration, glitch, deformed, mutated, cross-eyed, ugly, disfigured, wrinkles, open mouth, closed eyes, other characters"
+  
+  "🌲 Forest Trail":
+    prompt: |
+      Portrait of the same runner, identical person,
+      running on a forest trail,
+      trees and dirt path in the background,
+      relaxed expression,
+      diffused outdoor light,
+      realistic outdoor portrait
+    negative: "NSFW, nudity, painting, drawing, illustration, glitch, deformed, mutated, cross-eyed, ugly, disfigured, wrinkles, open mouth, closed eyes, other characters"
+
+# Professional Headshot Prompts
+headshots:
+  "📸 Studio Headshot":
+    prompt: |
+      Professional editorial headshot of the same person,
+      neutral studio background,
+      calm confident expression,
+      tailored professional attire,
+      soft diffused studio lighting,
+      natural skin texture,
+      realistic magazine photography
+    negative: |
+      cartoon, anime, illustration,
+      exaggerated features,
+      overly smooth skin,
+      plastic face,
+      dramatic shadows,
+      harsh lighting,
+      low quality
+  
+  "🏢 Office Setting":
+    prompt: |
+      High-end professional headshot of the same person,
+      subtle office setting in the background,
+      softly blurred professional indoor environment,
+      composed and confident presence,
+      premium business attire,
+      soft directional studio lighting,
+      realistic editorial photography
+    negative: |
+      artificial office,
+      fake interior,
+      overly sharp background,
+      glass walls,
+      corporate stock photo,
+      dramatic lighting,
+      cinematic contrast
+  
+  "✨ Premium Editorial":
+    prompt: |
+      High-end professional headshot of the same person,
+      minimal studio background,
+      composed and confident presence,
+      premium business attire,
+      soft directional studio lighting,
+      realistic editorial photography
+    negative: |
+      cartoon, anime, illustration,
+      exaggerated features,
+      overly smooth skin,
+      plastic face,
+      dramatic shadows,
+      harsh lighting,
+      low quality
