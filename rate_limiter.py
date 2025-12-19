@@ -8,10 +8,10 @@ import hashlib
 
 
 class RateLimiter:
-    def __init__(self, session_file: str, daily_limit: int, dev_limit: int):
+    def __init__(self, session_file: str, daily_limit: int, dev_daily_limit: int):
         self.session_file = Path(session_file)
         self.daily_limit = daily_limit
-        self.dev_limit = dev_limit
+        self.dev_daily_limit = dev_daily_limit
         self.is_dev_mode = os.getenv("DEV_MODE", "false").lower() == "true"
         
         # Create session file if doesn't exist
@@ -70,7 +70,7 @@ class RateLimiter:
         data = self._load_data()
         data = self._cleanup_expired(data)
         
-        limit = self.dev_limit if self.is_dev_mode else self.daily_limit
+        limit = self.dev_daily_limit if self.is_dev_mode else self.daily_limit
         now = datetime.now(timezone.utc)
         
         if device_id not in data:
@@ -109,7 +109,7 @@ class RateLimiter:
     def get_limit_message(self, remaining: int, reset_time: datetime) -> str:
         """Generate user-friendly limit message"""
         mode = "DEV" if self.is_dev_mode else "Standard"
-        limit = self.dev_limit if self.is_dev_mode else self.daily_limit
+        limit = self.dev_daily_limit if self.is_dev_mode else self.daily_limit
         
         if remaining > 0:
             return f"✅ {remaining}/{limit} generations remaining today ({mode} mode)"
