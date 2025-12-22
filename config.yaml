@@ -3,7 +3,7 @@
 
 # Rate Limiting
 rate_limit:
-  default_daily_limit: 5
+  default_daily_limit: 2
   dev_daily_limit: 10
   reset_timezone: "UTC"
   session_file: "rate_limits.json"

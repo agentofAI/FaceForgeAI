@@ -287,9 +287,20 @@ with gr.Blocks(theme=gr.themes.Soft(), title="FaceForge AI") as demo:
         - 💼 **Professional Headshots**: Studio-quality headshots with multiple styles
         - 🌍 **Scene Changer**: Place yourself in different environments
         - ⚡ **AI-Powered**: InstantID technology for identity preservation
-        - 🔒 **Rate Limited**: Fair usage with daily limits
+        - 🔒 **Rate Limited**: Fair usage with daily limits        
         
-        © 2025 Vijay S. Chaudhari | Powered by Replicate 🚀
+        """
+    )
+
+    gr.Markdown(
+        """
+        ---
+        ### ⚠️ Notice
+        - This is a **personal experimental project** and has undergone **limited testing**. Please use with caution.
+        - Although **InstantID** is designed to preserve identity, outputs may vary based on **prompts, model weights, and other influencing factors**. 
+        
+        
+        © 2025 Vijay S. Chaudhari | Powered by Replicate, InstantID and HuggingFace 🚀
         """
     )
 
